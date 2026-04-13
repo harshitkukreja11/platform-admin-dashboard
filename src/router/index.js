@@ -1,11 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TenantListPage from "../pages/TenantListPage.vue";
+import TenantDetailsPage from "../pages/TenantDetailsPage.vue";
 
 const routes = [
   {
     path: "/",
-    name: "tenants",
+    name: "tenant-list",
     component: TenantListPage,
+  },
+  {
+    path: "/tenant/:id",
+    name: "tenant-details",
+    component: TenantDetailsPage,
+    props: true,
   },
 ];
 

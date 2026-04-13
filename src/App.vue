@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, provide, watch } from "vue";
+import { onMounted, provide, ref, watch } from "vue";
 
 const isDark = ref(false);
 

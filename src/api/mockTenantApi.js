@@ -1,28 +1,43 @@
-import axios from "axios";
+import http from "./http";
 
-const tenantData = [
-  { id: 1, name: "Tenant A", users: 12, stores: 3 },
-  { id: 2, name: "Tenant B", users: 8, stores: 2 },
-  { id: 3, name: "Tenant C", users: 20, stores: 6 },
-  { id: 4, name: "Tenant D", users: 5, stores: 1 },
+const tenants = [
+  { id: 1, name: "Tenant A", users: 12, stores: 3, status: "Active", location: "Dubai" },
+  { id: 2, name: "Tenant B", users: 8, stores: 2, status: "Active", location: "Abu Dhabi" },
+  { id: 3, name: "Tenant C", users: 20, stores: 6, status: "Inactive", location: "Sharjah" },
+  { id: 4, name: "Tenant D", users: 5, stores: 1, status: "Active", location: "Ajman" },
+  { id: 5, name: "Tenant E", users: 17, stores: 4, status: "Pending", location: "Ras Al Khaimah" },
 ];
 
 export const getTenants = async () => {
-  await axios.get("https://example.com/mock-tenants", {
-    adapter: async () => {
+  const response = await http.get("/mock/tenants", {
+    adapter: async (config) => {
       return {
-        data: tenantData,
+        data: tenants,
         status: 200,
         statusText: "OK",
         headers: {},
-        config: {},
+        config,
       };
     },
   });
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(tenantData);
-    }, 500);
+  return response.data;
+};
+
+export const getTenantById = async (id) => {
+  const response = await http.get(`/mock/tenants/${id}`, {
+    adapter: async (config) => {
+      const tenant = tenants.find((item) => item.id === Number(id));
+
+      return {
+        data: tenant || null,
+        status: tenant ? 200 : 404,
+        statusText: tenant ? "OK" : "Not Found",
+        headers: {},
+        config,
+      };
+    },
   });
+
+  return response.data;
 };

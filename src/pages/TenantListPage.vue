@@ -1,68 +1,44 @@
 <template>
   <DefaultLayout>
     <section class="page-section">
-      <div
-        class="flex flex-column md:flex-row md:align-items-center md:justify-content-between gap-3 mb-4"
-      >
-        <div>
-          <h2 class="m-0 text-2xl font-semibold">Tenant List</h2>
-          <p class="mt-2 mb-0 page-subtitle">
-            Manage tenants, users, and stores from one place.
-          </p>
-        </div>
-
-        <div class="summary-badge">
-          Total Tenants: <strong>{{ tenants.length }}</strong>
-        </div>
+      <div class="grid mb-4">
+        <StatCard label="Total Tenants" :value="tenants.length" icon="pi pi-building" />
+        <StatCard label="Total Users" :value="totalUsers" icon="pi pi-users" />
+        <StatCard label="Total Stores" :value="totalStores" icon="pi pi-shopping-bag" />
       </div>
 
-      <div v-if="loading" class="text-center py-6">
-        <i class="pi pi-spin pi-spinner text-3xl mb-3"></i>
-        <p class="m-0">Loading tenants...</p>
-      </div>
+      <AnalyticsCharts :tenants="tenants" />
 
-      <div v-else-if="error" class="error-box">
-        <i class="pi pi-exclamation-triangle mr-2"></i>
-        {{ error }}
-      </div>
-
-      <div v-else class="grid">
-        <TenantCard
-          v-for="tenant in tenants"
-          :key="tenant.id"
-          :tenant="tenant"
-        />
-      </div>
+      <TenantTable :tenants="tenants" />
     </section>
   </DefaultLayout>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
-import TenantCard from "../components/TenantCard.vue";
+import StatCard from "../components/StatCard.vue";
+import AnalyticsCharts from "../components/AnalyticsCharts.vue";
+import TenantTable from "../components/TenantTable.vue";
 import { getTenants } from "../api/mockTenantApi";
 
 const tenants = ref([]);
-const loading = ref(false);
-const error = ref("");
 
 const fetchTenants = async () => {
-  loading.value = true;
-  error.value = "";
-
   try {
-    const data = await getTenants();
-    tenants.value = data;
-  } catch (err) {
-    error.value = "Failed to load tenant data.";
-    console.error(err);
-  } finally {
-    loading.value = false;
+    tenants.value = await getTenants();
+  } catch (error) {
+    console.error(error);
   }
 };
 
-onMounted(() => {
-  fetchTenants();
-});
+const totalUsers = computed(() =>
+  tenants.value.reduce((sum, t) => sum + t.users, 0)
+);
+
+const totalStores = computed(() =>
+  tenants.value.reduce((sum, t) => sum + t.stores, 0)
+);
+
+onMounted(fetchTenants);
 </script>

@@ -1,43 +1,55 @@
 <template>
-  <div class="col-12 sm:col-6 xl:col-4">
-    <div class="tenant-card-wrapper h-full">
-      <Card class="tenant-card h-full">
-        <template #title>
-          <div class="flex align-items-center gap-2">
-            <i class="pi pi-briefcase text-primary"></i>
-            <span>{{ tenant.name }}</span>
-          </div>
-        </template>
+  <div class="col-12 md:col-6 xl:col-4">
+    <PCard class="tenant-card">
+      <template #title>
+        <div class="flex align-items-center justify-content-between gap-2">
+          <span>{{ tenant.name }}</span>
+          <span class="tenant-status" :class="statusClass">
+            {{ tenant.status }}
+          </span>
+        </div>
+      </template>
 
-        <template #content>
-          <div class="grid">
-            <div class="col-6">
-              <div class="info-box">
-                <div class="info-label">Users</div>
-                <div class="info-value">{{ tenant.users }}</div>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="info-box">
-                <div class="info-label">Stores</div>
-                <div class="info-value">{{ tenant.stores }}</div>
-              </div>
-            </div>
+      <template #content>
+        <div class="tenant-meta">
+          <div class="tenant-box">
+            <div class="tenant-box-label">Users</div>
+            <div class="tenant-box-value">{{ tenant.users }}</div>
           </div>
-        </template>
-      </Card>
-    </div>
+
+          <div class="tenant-box">
+            <div class="tenant-box-label">Stores</div>
+            <div class="tenant-box-value">{{ tenant.stores }}</div>
+          </div>
+        </div>
+
+        <div class="tenant-location">
+          <i class="pi pi-map-marker"></i>
+          <span>{{ tenant.location }}</span>
+        </div>
+
+        <RouterLink :to="`/tenant/${tenant.id}`" class="details-btn">
+          View Details
+        </RouterLink>
+      </template>
+    </PCard>
   </div>
 </template>
 
 <script setup>
-import Card from "primevue/card";
+import { computed } from "vue";
+import { RouterLink } from "vue-router";
 
-defineProps({
+const props = defineProps({
   tenant: {
     type: Object,
     required: true,
   },
+});
+
+const statusClass = computed(() => {
+  if (props.tenant.status === "Active") return "status-active";
+  if (props.tenant.status === "Inactive") return "status-inactive";
+  return "status-pending";
 });
 </script>
