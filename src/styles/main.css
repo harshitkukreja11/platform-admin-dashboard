@@ -400,10 +400,12 @@ body {
   height: 360px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chart-card-header {
   margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .chart-title {
@@ -413,11 +415,19 @@ body {
   color: var(--app-text);
 }
 
-.chart-card canvas {
+.chart-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-body canvas {
+  display: block;
   width: 100% !important;
   height: 100% !important;
 }
-
 /* Table wrapper */
 .table-section {
   background: var(--app-surface);
@@ -549,7 +559,7 @@ body {
   color: #ffffff;
 }
 
-/* PrimeVue Dropdown / Select */
+/* PrimeVue Dropdown */
 .tenant-datatable .p-select,
 .tenant-datatable .p-dropdown,
 .status-dropdown .p-dropdown,
@@ -599,7 +609,7 @@ body {
   color: var(--app-primary);
 }
 
-/* Strong dark mode overrides for PrimeVue internals */
+/* dark mode */
 .app-dark .tenant-datatable,
 .app-dark .tenant-datatable .p-datatable-table-container,
 .app-dark .tenant-datatable .p-datatable-table,

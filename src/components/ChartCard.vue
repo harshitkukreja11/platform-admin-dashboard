@@ -4,7 +4,10 @@
       <div class="chart-card-header">
         <h3 class="chart-title">{{ title }}</h3>
       </div>
-      <canvas :ref="setCanvasRef"></canvas>
+
+      <div class="chart-body">
+        <canvas :ref="setCanvasRef"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -59,9 +62,7 @@ const renderChart = () => {
   });
 };
 
-onMounted(() => {
-  renderChart();
-});
+onMounted(renderChart);
 
 watch(
   () => [props.data, props.options, props.type],
@@ -72,8 +73,6 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
+  if (chartInstance) chartInstance.destroy();
 });
 </script>
