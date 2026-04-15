@@ -2,6 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
+import { createPinia } from "pinia";
+import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
+
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 
@@ -19,7 +22,24 @@ import "./styles/main.css";
 
 const app = createApp(App);
 
+const pinia = createPinia();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
 app.use(router);
+app.use(pinia);
+app.use(VueQueryPlugin, {
+  queryClient,
+  enableDevtoolsV6Plugin: true,
+});
 
 app.use(PrimeVue, {
   theme: {

@@ -10,7 +10,8 @@
         <span class="search-box">
           <i class="pi pi-search"></i>
           <input
-            v-model="localSearch"
+            :value="ui.tenantSearch"
+            @input="ui.setTenantSearch($event.target.value)"
             type="text"
             placeholder="Search tenants..."
             class="table-search-input"
@@ -18,7 +19,8 @@
         </span>
 
         <PDropdown
-          v-model="localStatus"
+          :modelValue="ui.tenantStatus"
+          @update:modelValue="ui.setTenantStatus"
           :options="statusOptions"
           optionLabel="label"
           optionValue="value"
@@ -71,8 +73,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { useUiStore } from "../stores/ui";
 
 const props = defineProps({
   tenants: {
@@ -81,8 +84,7 @@ const props = defineProps({
   },
 });
 
-const localSearch = ref("");
-const localStatus = ref(null);
+const ui = useUiStore();
 
 const statusOptions = [
   { label: "Active", value: "Active" },
@@ -92,12 +94,14 @@ const statusOptions = [
 
 const filteredData = computed(() => {
   return props.tenants.filter((tenant) => {
+    const search = ui.tenantSearch.toLowerCase();
+
     const matchesSearch =
-      tenant.name.toLowerCase().includes(localSearch.value.toLowerCase()) ||
-      tenant.location.toLowerCase().includes(localSearch.value.toLowerCase());
+      tenant.name.toLowerCase().includes(search) ||
+      tenant.location.toLowerCase().includes(search);
 
     const matchesStatus =
-      !localStatus.value || tenant.status === localStatus.value;
+      !ui.tenantStatus || tenant.status === ui.tenantStatus;
 
     return matchesSearch && matchesStatus;
   });

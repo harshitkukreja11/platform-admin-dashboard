@@ -1,12 +1,11 @@
 <template>
-  <button class="theme-toggle-btn" @click="theme.toggleTheme">
-    <i :class="theme.isDark.value ? 'pi pi-sun' : 'pi pi-moon'"></i>
-    <span>{{ theme.isDark.value ? "Light Mode" : "Dark Mode" }}</span>
+  <button class="theme-toggle-btn" @click="ui.toggleTheme()">
+    <i :class="ui.isDark ? 'pi pi-sun' : 'pi pi-moon'"></i>
   </button>
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { useUiStore } from "../stores/ui";
 
-const theme = inject("theme");
+const ui = useUiStore();
 </script>
