@@ -1,12 +1,15 @@
 <template>
-  <div class="layout-wrapper">
-    <SidebarMenu />
+  <div class="app-shell">
+    <div class="layout-wrapper">
+      <SidebarMenu />
 
-    <div class="layout-main">
-      <AppHeader />
-      <main class="layout-content">
-        <slot />
-      </main>
+      <div class="layout-main">
+        <AppHeader />
+
+        <main class="layout-content">
+          <slot />
+        </main>
+      </div>
     </div>
   </div>
 </template>
